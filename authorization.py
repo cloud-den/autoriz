@@ -1,39 +1,31 @@
-from main import load_key
-from cryptography.fernet import Fernet
 import os
+from cryptography.fernet import Fernet
+from main import load_key
 
 
 key = load_key()
 f = Fernet(key)
 
-def authorization(f, filename="passwords.txt"):
-    while True:
-        login_input = input("Введите логин: ")
-        password_input = input("Введите пароль: ")
-
-        if not os.path.exists(filename):
-            print("Файл с паролями не найден.")
-            return
+def authorization(login, password, f, filename="passwords.txt"):
+    if not os.path.exists(filename):
+        return False
         
-        with open(filename, "r") as file:
-            for line in file:
-                login, encrypted_password = line.strip().split("|")
-                if login == login_input:
-                    try:
-                        decrypted_password = f.decrypt(encrypted_password.encode()).decode()
-                        if decrypted_password == password_input:
-                            print("Авторизация успешна!")
-                            return
-                        else:
-                            print("Неверный пароль.")
-                            break
-                    except:
-                        print("Ошибка при расшифровке пароля.")
-                        break
-            else:
-                print("Логин не найден.")
+    with open(filename, "r") as file:
+        for line in file:
+            stored_login, encrypted_pass = line.strip().split("|")
+            if stored_login == login:
+                decrypted_pass = f.decrypt(encrypted_pass.encode()).decode()
+                return decrypted_pass == password
+    return False
 
-
+while True:
+    input_login = input("Введите логин: ").strip()
+    input_password = input("Введите пароль: ").strip()
+    if authorization(input_login, input_password, f):
+        print("Авторизация успешна!")
+        break
+    else:
+        print("Ошибка: неверный логин или пароль")
 
 if __name__ == "__main__":
-    authorization(f)
+    authorization(input_login, input_password, f, filename="passwords.txt")
