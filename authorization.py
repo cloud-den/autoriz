@@ -12,10 +12,10 @@ def authorization(login, password, f, filename="passwords.txt"):
         
     with open(filename, "r") as file:
         for line in file:
-            stored_login, encrypted_pass = line.strip().split("|")
-            if stored_login == login:
-                decrypted_pass = f.decrypt(encrypted_pass.encode()).decode()
-                return decrypted_pass == password
+            login, encrypted_password = line.strip().split("|")
+            if input_login == login:
+                decrypted_password = f.decrypt(encrypted_password.encode()).decode()
+                return decrypted_password == password
     return False
 
 while True:
