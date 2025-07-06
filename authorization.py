@@ -6,7 +6,7 @@ from main import load_key
 key = load_key()
 f = Fernet(key)
 
-def authorization(login, password, f, filename="passwords.txt"):
+def authorization(login, password, f, filename = "passwords.txt"):
     if not os.path.exists(filename):
         return False
         
@@ -28,4 +28,4 @@ while True:
         print("Ошибка: неверный логин или пароль")
 
 if __name__ == "__main__":
-    authorization(input_login, input_password, f, filename="passwords.txt")
+    authorization(input_login, input_password, f, filename = "passwords.txt")
