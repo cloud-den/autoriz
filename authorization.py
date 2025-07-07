@@ -6,6 +6,7 @@ from main import load_key
 key = load_key()
 f = Fernet(key)
 
+
 def authorization(login, password, f, filename = "passwords.txt"):
     if not os.path.exists(filename):
         return False
